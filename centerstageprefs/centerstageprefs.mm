@@ -20,8 +20,7 @@
 }
 @end
 
-@interface CenterStageiPad : PSListController {
-}
+@interface CenterStageiPad : PSListController {}
 @end
 
 @implementation CenterStageiPad
@@ -33,4 +32,3 @@
 }
 @end
 
-// vim:ft=objc

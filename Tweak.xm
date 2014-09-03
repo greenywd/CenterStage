@@ -8,7 +8,6 @@ static BOOL CCisEnabled = YES;
 static BOOL NCisEnabled = YES;
 BOOL otherRepo;
 
-//iPad Support - 1024 x 768 for older iPads (iPad 2 and Mini). 2048 x 1536 for newer iPads (iPad 3 and above)
 %hook SBNotificationCenterController
 -(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
 	if((arg1.x > 100 && arg1.x < 220) || !NCisEnabled) {

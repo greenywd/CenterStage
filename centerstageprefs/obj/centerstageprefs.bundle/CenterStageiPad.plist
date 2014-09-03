@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>items</key>
+    <array>
+       <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>footerText</key>
+            <string>Only use this option if you're using an iPad with a screen resolution of 2048 x 1536 (iPad 3 and newer).</string>
+        </dict>
+       <dict>
+            <key>cell</key>             <string>PSSwitchCell</string>
+            <key>default</key>          <false/>
+            <key>defaults</key>         <string>com.greeny.centerstageprefs</string>
+            <key>key</key>              <string>iPadisEnabled</string>
+            <key>label</key>            <string>Newer iPad Enable</string>
+            <key>PostNotification</key> <string>com.greeny.centerstageprefs/settingschanged</string>
+        </dict>
+       <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>footerText</key>
+            <string>Only use this option if you're using an iPad with a screen resolution of 1024×768 (iPad 2 and iPad Mini (non-retina)).</string>
+        </dict>
+        <dict>
+            <key>cell</key>             <string>PSSwitchCell</string>
+            <key>default</key>          <false/>
+            <key>defaults</key>         <string>com.greeny.centerstageprefs</string>
+            <key>key</key>              <string>OlderiPadisEnabled</string>
+            <key>label</key>            <string>Older iPad Enable</string>
+            <key>PostNotification</key> <string>com.greeny.centerstageprefs/settingschanged</string>
+        </dict>
+    </array>
+    <key>title</key>
+    <string>CenterStage</string>
+</dict>
+</plist>

@@ -1,0 +1,10 @@
+{
+	entry = {
+		bundle = centerstageprefs;
+		cell = PSLinkCell;
+		detail = "centerstageprefsListController";
+		icon = "centerstageprefs.png";
+		isController = 1;
+		label = CenterStage;
+	};
+}

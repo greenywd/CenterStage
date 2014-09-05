@@ -14,15 +14,15 @@ BOOL otherRepo;
   if(iPhone5Plus){
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
       //These values I haven't sorted out yet.
-      if((arg1.x > 518 && arg1.x < 618) || !NCisEnabled) {
+      if((arg1.x > 380 && arg1.x < 580) || !NCisEnabled) {
             %orig;
      }
+    }
 } else {
     //In Portrait these values work fine
     if((arg1.x > 100 && arg1.x < 220) || !NCisEnabled) {
             %orig;
         }
-    }
 }
   //3.5" Code (iPhone 4/4s)
   if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {

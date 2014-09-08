@@ -13,7 +13,6 @@
 
 static BOOL CCisEnabled = YES;
 static BOOL NCisEnabled = YES;
-static BOOL iPhone5Plus = NO;
 BOOL otherRepo;
 
 %hook SBNotificationCenterController
@@ -95,7 +94,6 @@ static void loadPrefs()
     {
       CCisEnabled = [prefs objectForKey:@"CCisEnabled"] ? [[prefs objectForKey:@"CCisEnabled"] boolValue] : CCisEnabled;
       NCisEnabled = [prefs objectForKey:@"NCisEnabled"] ? [[prefs objectForKey:@"NCisEnabled"] boolValue] : NCisEnabled;
-      iPhone5Plus = [prefs objectForKey:@"iPhone5Plus"] ? [[prefs objectForKey:@"iPhone5Plus"] boolValue] : iPhone5Plus;
     }
     [prefs release];
   }

@@ -10,7 +10,7 @@
 
 static BOOL CCisEnabled = YES;
 static BOOL NCisEnabled = YES;
-static BOOL iPhone5Plus = YES;
+static BOOL iPhone5Plus = NO;
 BOOL otherRepo;
 
 %hook SBNotificationCenterController
@@ -30,7 +30,7 @@ BOOL otherRepo;
     //3.5" Code (iPhone 4/4s)
     SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
         if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
-      if((arg1.x > 200 && arg1.x < 320 ) || !NCisEnabled) {
+      if((arg1.x > 180 && arg1.x < 300) || !NCisEnabled) {
         %orig;
       }
     } else {
@@ -59,7 +59,7 @@ BOOL otherRepo;
     //3.5" Code (iPhone 4/4s)
     SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
         if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
-      if((arg1.x > 200 && arg1.x < 320 ) || !CCisEnabled) {
+      if((arg1.x > 200 && arg1.x < 400) || !CCisEnabled) {
         %orig;
       }
     } else {

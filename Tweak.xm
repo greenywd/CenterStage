@@ -17,61 +17,47 @@ BOOL otherRepo;
 
 %hook SBNotificationCenterController
 -(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
-  if(iPhone5Plus){
-    SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
-    if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
-      if((arg1.x > 280 && arg1.x < 400) || !NCisEnabled) {
-        %orig;
-      }
-    } else {
-      if((arg1.x > 100 && arg1.x < 220) || !NCisEnabled) {
-        %orig;
-      }
-    }
-  } else {
-    //3.5" Code (iPhone 4/4s)
-    SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
-    if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
-      if((arg1.x > 180 && arg1.x < 300) || !NCisEnabled) {
-        %orig;
-      }
-    } else {
-      if((arg1.x > 100 && arg1.x < 220) || !NCisEnabled) {
-        %orig;
-      }
-    }
+  int leftGrabberX = 0;
+  int rightGrabberX = 0;
+  SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
+  BOOL isLandscape = UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation]);
+
+  if (IS_IPHONE_5 && isLandscape) { // Landscape 4" device
+    leftGrabberX = 280;
+    rightGrabberX = 400;
+  } else if (isLandscape) { // Landscape 3.5" device
+    leftGrabberX = 180;
+    rightGrabberX = 300;
+  } else { // Portrait iPhone
+    leftGrabberX = 100;
+    rightGrabberX = 220;
+  }
+
+  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !NCisEnabled) {
+    %orig;
   }
 }
 %end
 
 %hook SBControlCenterController
 -(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
-  if(iPhone5Plus){
-    SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
-    if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
-      if((arg1.x > 280 && arg1.x < 400) || !CCisEnabled) {
-        %orig;
-      }
-    } else {
-      if((arg1.x > 100 && arg1.x < 220) || !CCisEnabled) {
-        %orig;
-      }
-    }
-  } else {
-    //3.5" Code (iPhone 4/4s)
-    SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
-    if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
-      if((arg1.x > 200 && arg1.x < 400) || !CCisEnabled) {
-        %orig;
-      }
-    } else {
-      if((arg1.x > 100 && arg1.x < 220) || !CCisEnabled) {
-        %orig;
-      }
-    }
+  int leftGrabberX = 0;
+  int rightGrabberX = 0;
+  SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
+  BOOL isLandscape = UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation]);
+
+  if (IS_IPHONE_5 && isLandscape) { // Landscape 4" device
+    leftGrabberX = 280;
+    rightGrabberX = 400;
+  } else if (isLandscape) { // Landscape 3.5" device
+    leftGrabberX = 200;
+    rightGrabberX = 400;
+  } else { // Portrait iPhone
+    leftGrabberX = 100;
+    rightGrabberX = 220;
   }
 
-  if((arg1.x > 100 && arg1.x < 220) || !CCisEnabled) {
+  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || self.presented || !CCisEnabled) {
     %orig;
   }
 }

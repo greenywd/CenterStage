@@ -4,6 +4,10 @@
 @property (assign,getter=isPresented,nonatomic) BOOL presented;
 @end
 
+@interface SpringBoard
+-(int)_frontMostAppOrientation;
+@end
+
 static BOOL CCisEnabled = YES;
 static BOOL NCisEnabled = YES;
 static BOOL iPhone5Plus = YES;
@@ -11,43 +15,63 @@ BOOL otherRepo;
 
 %hook SBNotificationCenterController
 -(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
-  if(iPhone5Plus){
-    if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
-      //These values I haven't sorted out yet.
-      if((arg1.x > 380 && arg1.x < 580) || !NCisEnabled) {
-            %orig;
-     }
+    if(iPhone5Plus){
+        SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
+        if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
+            if((arg1.x > 280 && arg1.x < 400) || !NCisEnabled) {
+                %orig;
+        }
+    } else {
+      if((arg1.x > 100 && arg1.x < 220) || !NCisEnabled) {
+        %orig;
+      }
     }
 } else {
-    //In Portrait these values work fine
-    if((arg1.x > 100 && arg1.x < 220) || !NCisEnabled) {
-            %orig;
-        }
-}
-  //3.5" Code (iPhone 4/4s)
-  if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
-      //These values are the same to test landscape; see if I messed something up.
-      if((arg1.x > 380 && arg1.x < 580 ) || !NCisEnabled) {
-            %orig;
-     }
-} else {
-    if((arg1.x > 380 && arg1.x < 580) || !NCisEnabled) {
-            %orig;
-          }
-  }  
+    //3.5" Code (iPhone 4/4s)
+    SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
+        if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
+      if((arg1.x > 200 && arg1.x < 320 ) || !NCisEnabled) {
+        %orig;
+      }
+    } else {
+      if((arg1.x > 100 && arg1.x < 220) || !NCisEnabled) {
+        %orig;
+      }
+    }
+  }
 }
 %end
 
 %hook SBControlCenterController
--(void)beginTransitionWithTouchLocation:(CGPoint)arg1 {
-	if ((arg1.x > 100 && arg1.x < 220) || self.presented || !CCisEnabled) {
-		%orig;
+-(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
+    if(iPhone5Plus){
+        SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
+        if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
+            if((arg1.x > 280 && arg1.x < 400) || !CCisEnabled) {
+                %orig;
+        }
+    } else {
+      if((arg1.x > 100 && arg1.x < 220) || !CCisEnabled) {
+        %orig;
+      }
+    }
+} else {
+    //3.5" Code (iPhone 4/4s)
+    SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
+        if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) {
+      if((arg1.x > 200 && arg1.x < 320 ) || !CCisEnabled) {
+        %orig;
+      }
+    } else {
+      if((arg1.x > 100 && arg1.x < 220) || !CCisEnabled) {
+        %orig;
+      }
+    }
   }
 }
 %end
 
 %hook SpringBoard
-
 -(void)applicationDidFinishLaunching:(id)application{
      %orig;
      if (otherRepo) {

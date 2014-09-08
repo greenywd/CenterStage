@@ -15,6 +15,7 @@
             <key>default</key>          <true/>
             <key>defaults</key>         <string>com.greeny.centerstageprefs</string>
             <key>key</key>              <string>iPhone5Plus</string>
+            <key>key</key>              <string>iPhone5PlusCC</string>
             <key>label</key>            <string>4" Devices</string>
             <key>PostNotification</key> <string>com.greeny.centerstageprefs/settingschanged</string>
         </dict>

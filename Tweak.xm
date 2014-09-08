@@ -40,7 +40,7 @@ BOOL otherRepo;
 %end
 
 %hook SBControlCenterController
--(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
+-(void)beginTransitionWithTouchLocation:(CGPoint)arg1 {
   int leftGrabberX = 0;
   int rightGrabberX = 0;
   SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];

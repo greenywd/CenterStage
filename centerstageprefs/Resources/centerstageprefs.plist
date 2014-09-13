@@ -4,6 +4,14 @@
 <dict>
     <key>items</key>
     <array>
+        <dict>
+            <key>cell</key>             <string>PSSwitchCell</string>
+            <key>default</key>          <true/>
+            <key>defaults</key>         <string>com.greeny.centerstageprefs</string>
+            <key>key</key>              <string>iPad</string>
+            <key>label</key>            <string>IPad Enabled</string>
+            <key>PostNotification</key> <string>com.greeny.centerstageprefs/settingschanged</string>
+        </dict>
        <dict>
             <key>cell</key>             <string>PSGroupCell</string>
         </dict>
@@ -32,6 +40,8 @@
         <dict>
             <key>cell</key>
             <string>PSButtonCell</string>
+            <key>icon</key>
+            <string>paypal.png</string>
             <key>label</key>
             <string>Donate</string>
             <key>action</key>

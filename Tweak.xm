@@ -108,7 +108,7 @@ BOOL otherRepo;
     rightGrabberX = 220;
   }
 }
-  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !NCisEnabled) {
+  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !CCisEnabled) {
     %orig;
   }
 }

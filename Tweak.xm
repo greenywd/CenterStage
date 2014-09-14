@@ -1,7 +1,8 @@
-#import <UIKit/UIKit.h>
-
 #define IS_IPHONE_5 [[UIScreen mainScreen] bounds].size.height == 568.0
 #define IS_IPAD UIUserInterfaceIdiom() == UIUserInterfaceIdiomPad
+
+NS_INLINE CGFloat calcHeight(CGFloat percent) { return percent * [[UIScreen mainScreen] bounds].size.height; }
+//NS_INLINE CGFloat calcWidth(CGFloat percent) { return percent * [[UIScreen mainScreen] bounds].size.width; }
 
 @interface SBControlCenterController : NSObject
 @property (assign,getter=isPresented,nonatomic) BOOL presented;
@@ -11,54 +12,46 @@
 -(int)_frontMostAppOrientation;
 @end
 
+@interface UIApplication (CenterStage)
+-(int)_frontMostAppOrientation;
+@end
+
 static BOOL CCisEnabled = YES;
 static BOOL NCisEnabled = YES;
-static BOOL iPad = YES;
-BOOL otherRepo;
+static BOOL iPad = IS_IPAD;
+static BOOL otherRepo;
+static int leftGrabberX = 0;
+static int rightGrabberX = 0;
+
+BOOL isLandscape() {
+
+  //landscape
+  if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] _frontMostAppOrientation])) return YES;
+  //portrait
+  else return NO;
+
+}
+
+void checkLocations() {
+  
+  if (isLandscape()) {
+    NSLog(@"Get over here! %i %i", leftGrabberX, rightGrabberX);
+    leftGrabberX = calcHeight(.4029);
+    rightGrabberX = calcHeight(.6042);
+  }
+  
+  else {
+    leftGrabberX = calcHeight(.2025);
+    rightGrabberX = calcHeight(.4575);
+  }
+
+}
 
 %hook SBNotificationCenterController
 -(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
-  int leftGrabberX = 0;
-  int rightGrabberX = 0;
-  SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
-  BOOL isLandscape = UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation]);
-  BOOL isPortrait = UIInterfaceOrientationIsPortrait([_springBoard _frontMostAppOrientation]);
-
-  if(iPad){
-  if (IS_IPAD && isLandscape) {
-    leftGrabberX = 950;
-    rightGrabberX = 1100;
-  } else if (isLandscape) {
-    leftGrabberX = 470;
-    rightGrabberX = 555;
-  } else {
-    leftGrabberX = 345;
-    rightGrabberX = 435;
-  }
-
-  if (IS_IPAD && isPortrait) {
-      leftGrabberX = 700;
-      rightGrabberX = 830;
-    } else if (isPortrait) {
-      leftGrabberX = 345;
-      rightGrabberX = 435;
-    } else {
-      leftGrabberX = 470;
-      rightGrabberX = 555;
-    }
-  }
-  else{
-  if (IS_IPHONE_5 && isLandscape) { // Landscape 4" device
-    leftGrabberX = 280;
-    rightGrabberX = 400;
-  } else if (isLandscape) { // Landscape 3.5" device
-    leftGrabberX = 180;
-    rightGrabberX = 300;
-  } else { // Portrait iPhone
-    leftGrabberX = 100;
-    rightGrabberX = 220;
-  }
-}
+  
+  checkLocations();
+  
   if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !NCisEnabled) {
     %orig;
   }
@@ -67,52 +60,15 @@ BOOL otherRepo;
 
 %hook SBControlCenterController
 -(void)beginTransitionWithTouchLocation:(CGPoint)arg1 {
-  int leftGrabberX = 0;
-  int rightGrabberX = 0;
-  SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
-  BOOL isLandscape = UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation]);
-  BOOL isPortrait = UIInterfaceOrientationIsPortrait([_springBoard _frontMostAppOrientation]);
 
-  if(iPad){
-  if (IS_IPAD && isLandscape) {
-    leftGrabberX = 950;
-    rightGrabberX = 1100;
-  } else if (isLandscape) {
-    leftGrabberX = 470;
-    rightGrabberX = 555;
-  } else {
-    leftGrabberX = 345;
-    rightGrabberX = 435;
-  }
-
-  if (IS_IPAD && isPortrait) {
-      leftGrabberX = 700;
-      rightGrabberX = 830;
-    } else if (isPortrait) {
-      leftGrabberX = 345;
-      rightGrabberX = 435;
-    } else {
-      leftGrabberX = 470;
-      rightGrabberX = 555;
-    }
-  }
-  else{
-  if (IS_IPHONE_5 && isLandscape) { // Landscape 4" device
-    leftGrabberX = 280;
-    rightGrabberX = 400;
-  } else if (isLandscape) { // Landscape 3.5" device
-    leftGrabberX = 180;
-    rightGrabberX = 300;
-  } else { // Portrait iPhone
-    leftGrabberX = 100;
-    rightGrabberX = 220;
-  }
-}
+  checkLocations();
+  
   if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !CCisEnabled) {
     %orig;
   }
 }
 %end
+
 
 %hook SpringBoard
 -(void)applicationDidFinishLaunching:(id)application{

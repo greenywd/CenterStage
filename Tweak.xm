@@ -2,7 +2,11 @@
 #define IS_IPAD UIUserInterfaceIdiom() == UIUserInterfaceIdiomPad
 
 NS_INLINE CGFloat calcHeight(CGFloat percent) { return percent * [[UIScreen mainScreen] bounds].size.height; }
+<<<<<<< HEAD
 //NS_INLINE CGFloat calcWidth(CGFloat percent) { return percent * [[UIScreen mainScreen] bounds].size.width; }
+=======
+NS_INLINE CGFloat calcWidth(CGFloat percent) { return percent * [[UIScreen mainScreen] bounds].size.width; }
+>>>>>>> FETCH_HEAD
 
 @interface SBControlCenterController : NSObject
 @property (assign,getter=isPresented,nonatomic) BOOL presented;
@@ -35,6 +39,7 @@ BOOL isLandscape() {
 void checkLocations() {
   
   if (isLandscape()) {
+<<<<<<< HEAD
     NSLog(@"Get over here! %i %i", leftGrabberX, rightGrabberX);
     leftGrabberX = calcHeight(.4029);
     rightGrabberX = calcHeight(.6042);
@@ -43,6 +48,15 @@ void checkLocations() {
   else {
     leftGrabberX = calcHeight(.2025);
     rightGrabberX = calcHeight(.4575);
+=======
+    leftGrabberX = calcHeight(.492957746);
+    rightGrabberX = calcHeight(.704225352);
+  }
+  
+  else {
+    leftGrabberX = calcHeight(.3125);
+    rightGrabberX = calcHeight(.6875);
+>>>>>>> FETCH_HEAD
   }
 
 }
@@ -73,7 +87,7 @@ void checkLocations() {
 %hook SpringBoard
 -(void)applicationDidFinishLaunching:(id)application{
   %orig;
-    BOOL ranBefore = [[NSUserDefaults standardUserDefaults] boolForKey:@"RanBefore"];
+    BOOL ranBefore = [[NSUserDefaults standardUserDefaults] boolForKey:@"CenterStageRanBefore"];
 
     if (!ranBefore) {
         UIAlertView *alert = [[UIAlertView alloc]
@@ -84,13 +98,13 @@ void checkLocations() {
                           otherButtonTitles:nil];
         [alert show];
         [alert release];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"RanBefore"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"CenterStageRanBefore"];
         [[NSUserDefaults standardUserDefaults] synchronize];
 }
   if (otherRepo) {
     UIAlertView* repoAlert = [[UIAlertView alloc] initWithTitle:@"Hey there!" message:@"I see you've downloaded my tweak from a different repo. Please download this tweak from BigBoss to help support me and you also get faster updates!" delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
     [repoAlert show];
-    %orig;
+    [repoAlert release];
   }
 }
 %end

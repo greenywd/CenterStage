@@ -1,7 +1,8 @@
-#import <UIKit/UIKit.h>
-
 #define IS_IPHONE_5 [[UIScreen mainScreen] bounds].size.height == 568.0
 #define IS_IPAD UIUserInterfaceIdiom() == UIUserInterfaceIdiomPad
+
+NS_INLINE CGFloat calcHeight(CGFloat percent) { return percent * [[UIScreen mainScreen] bounds].size.height; }
+NS_INLINE CGFloat calcWidth(CGFloat percent) { return percent * [[UIScreen mainScreen] bounds].size.width; }
 
 @interface SBControlCenterController : NSObject
 @property (assign,getter=isPresented,nonatomic) BOOL presented;
@@ -11,54 +12,45 @@
 -(int)_frontMostAppOrientation;
 @end
 
+@interface UIApplication (CenterStage)
+-(int)_frontMostAppOrientation;
+@end
+
 static BOOL CCisEnabled = YES;
 static BOOL NCisEnabled = YES;
-static BOOL iPad = YES;
-BOOL otherRepo;
+static BOOL iPad = IS_IPAD;
+static BOOL otherRepo;
+static int leftGrabberX = 0;
+static int rightGrabberX = 0;
+
+BOOL isLandscape() {
+
+  //landscape
+  if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] _frontMostAppOrientation])) return YES;
+  //portrait
+  else return NO;
+
+}
+
+void checkLocations() {
+  
+  if (isLandscape()) {
+    leftGrabberX = calcHeight(.492957746);
+    rightGrabberX = calcHeight(.704225352);
+  }
+  
+  else {
+    leftGrabberX = calcHeight(.3125);
+    rightGrabberX = calcHeight(.6875);
+  }
+
+}
 
 %hook SBNotificationCenterController
 -(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
-  int leftGrabberX = 0;
-  int rightGrabberX = 0;
-  SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
-  BOOL isLandscape = UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation]);
-  BOOL isPortrait = UIInterfaceOrientationIsPortrait([_springBoard _frontMostAppOrientation]);
-
-  if(iPad){
-  if (IS_IPAD && isLandscape) {
-    leftGrabberX = 950;
-    rightGrabberX = 1100;
-  } else if (isLandscape) {
-    leftGrabberX = 470;
-    rightGrabberX = 555;
-  } else {
-    leftGrabberX = 345;
-    rightGrabberX = 435;
-  }
-
-  if (IS_IPAD && isPortrait) {
-      leftGrabberX = 700;
-      rightGrabberX = 830;
-    } else if (isPortrait) {
-      leftGrabberX = 345;
-      rightGrabberX = 435;
-    } else {
-      leftGrabberX = 470;
-      rightGrabberX = 555;
-    }
-  }
-  else{
-  if (IS_IPHONE_5 && isLandscape) { // Landscape 4" device
-    leftGrabberX = 280;
-    rightGrabberX = 400;
-  } else if (isLandscape) { // Landscape 3.5" device
-    leftGrabberX = 180;
-    rightGrabberX = 300;
-  } else { // Portrait iPhone
-    leftGrabberX = 100;
-    rightGrabberX = 220;
-  }
-}
+  
+  checkLocations();
+  
   if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !NCisEnabled) {
     %orig;
   }
@@ -67,47 +59,9 @@ BOOL otherRepo;
 
 %hook SBControlCenterController
 -(void)beginTransitionWithTouchLocation:(CGPoint)arg1 {
-  int leftGrabberX = 0;
-  int rightGrabberX = 0;
-  SpringBoard *_springBoard = (SpringBoard *)[UIApplication sharedApplication];
-  BOOL isLandscape = UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation]);
-  BOOL isPortrait = UIInterfaceOrientationIsPortrait([_springBoard _frontMostAppOrientation]);
 
-  if(iPad){
-  if (IS_IPAD && isLandscape) {
-    leftGrabberX = 950;
-    rightGrabberX = 1100;
-  } else if (isLandscape) {
-    leftGrabberX = 470;
-    rightGrabberX = 555;
-  } else {
-    leftGrabberX = 345;
-    rightGrabberX = 435;
-  }
-
-  if (IS_IPAD && isPortrait) {
-      leftGrabberX = 700;
-      rightGrabberX = 830;
-    } else if (isPortrait) {
-      leftGrabberX = 345;
-      rightGrabberX = 435;
-    } else {
-      leftGrabberX = 470;
-      rightGrabberX = 555;
-    }
-  }
-  else{
-  if (IS_IPHONE_5 && isLandscape) { // Landscape 4" device
-    leftGrabberX = 280;
-    rightGrabberX = 400;
-  } else if (isLandscape) { // Landscape 3.5" device
-    leftGrabberX = 180;
-    rightGrabberX = 300;
-  } else { // Portrait iPhone
-    leftGrabberX = 100;
-    rightGrabberX = 220;
-  }
-}
+  checkLocations();
+  
   if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !CCisEnabled) {
     %orig;
   }
@@ -117,7 +71,7 @@ BOOL otherRepo;
 %hook SpringBoard
 -(void)applicationDidFinishLaunching:(id)application{
   %orig;
-    BOOL ranBefore = [[NSUserDefaults standardUserDefaults] boolForKey:@"RanBefore"];
+    BOOL ranBefore = [[NSUserDefaults standardUserDefaults] boolForKey:@"CenterStageRanBefore"];
 
     if (!ranBefore) {
         UIAlertView *alert = [[UIAlertView alloc]
@@ -128,13 +82,13 @@ BOOL otherRepo;
                           otherButtonTitles:nil];
         [alert show];
         [alert release];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"RanBefore"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"CenterStageRanBefore"];
         [[NSUserDefaults standardUserDefaults] synchronize];
 }
   if (otherRepo) {
     UIAlertView* repoAlert = [[UIAlertView alloc] initWithTitle:@"Hey there!" message:@"I see you've downloaded my tweak from a different repo. Please download this tweak from BigBoss to help support me and you also get faster updates!" delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
     [repoAlert show];
-    %orig;
+    [repoAlert release];
   }
 }
 %end

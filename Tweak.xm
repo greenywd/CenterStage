@@ -1,5 +1,3 @@
-#import <UIKit/UIKit.h>
-
 #define IS_IPHONE_5 [[UIScreen mainScreen] bounds].size.height == 568.0
 #define IS_IPAD UIUserInterfaceIdiom() == UIUserInterfaceIdiomPad
 
@@ -14,18 +12,21 @@ NS_INLINE CGFloat calcWidth(CGFloat percent) { return percent * [[UIScreen mainS
 -(int)_frontMostAppOrientation;
 @end
 
+@interface UIApplication (CenterStage)
+-(int)_frontMostAppOrientation;
+@end
+
 static BOOL CCisEnabled = YES;
 static BOOL NCisEnabled = YES;
 static BOOL iPad = IS_IPAD;
 static BOOL otherRepo;
 static int leftGrabberX = 0;
 static int rightGrabberX = 0;
-static SpringBoard* _springboard = [UIApplication sharedApplication];
 
-BOOL isLandscape {
+BOOL isLandscape() {
 
   //landscape
-  if (UIInterfaceOrientationIsLandscape([_springBoard _frontMostAppOrientation])) return YES;
+  if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] _frontMostAppOrientation])) return YES;
   //portrait
   else return NO;
 

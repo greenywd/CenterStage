@@ -32,7 +32,7 @@ BOOL isLandscape() {
 
 }
 
-void checkLocations {
+void checkLocations() {
   
   if (isLandscape) {
     leftGrabberX = calcHeight(.492957746);

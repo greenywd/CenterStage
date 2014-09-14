@@ -34,7 +34,7 @@ BOOL isLandscape() {
 
 void checkLocations() {
   
-  if (isLandscape) {
+  if (isLandscape()) {
     leftGrabberX = calcHeight(.492957746);
     rightGrabberX = calcHeight(.704225352);
   }

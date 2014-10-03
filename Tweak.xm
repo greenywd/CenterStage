@@ -35,7 +35,6 @@ BOOL isLandscape() {
 void checkLocations() {
   
   if (isLandscape()) {
-    NSLog(@"Get over here! %i %i", leftGrabberX, rightGrabberX);
     leftGrabberX = calcHeight(.4029);
     rightGrabberX = calcHeight(.6042);
   }
@@ -52,7 +51,7 @@ void checkLocations() {
   
   checkLocations();
   
-  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !NCisEnabled) {
+  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || arg1.y >= 100 || !NCisEnabled) {
     %orig;
   }
 }
@@ -78,7 +77,7 @@ void checkLocations() {
     if (!ranBefore) {
         UIAlertView *alert = [[UIAlertView alloc]
                           initWithTitle:@"CenterStage"
-                          message:@"Hey there! Thank you for downloading CenterStage, iPad users please go straight to settings to configure the tweak. \n If you appreciate my work, please donate by using the button in the settings app."
+                          message:@"Hey there! Thank you for downloading CenterStage. \n If you appreciate my work, please donate by using the button in the settings app."
                           delegate:self
                           cancelButtonTitle:@"Thanks!"
                           otherButtonTitles:nil];

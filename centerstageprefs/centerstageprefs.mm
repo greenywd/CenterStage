@@ -45,7 +45,7 @@ int width = [[UIScreen mainScreen] bounds].size.width;
 {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
 	if (self) {
-		CGRect frame = CGRectMake(0, -5, width, 60);
+		CGRect frame = CGRectMake(0, -15, width, 60);
  
 		_label = [[UILabel alloc] initWithFrame:frame];
 		[_label setNumberOfLines:1];

@@ -1,4 +1,4 @@
-#import <Preferences/Preferences.h>
+#import <Preferences/PSListController.h>
 #import <Preferences/PSTableCell.h>
 
 int width = [[UIScreen mainScreen] bounds].size.width;
@@ -61,7 +61,7 @@ int width = [[UIScreen mainScreen] bounds].size.width;
 }
  
 - (CGFloat)preferredHeightForWidth:(CGFloat)arg1 {
-	CGFloat prefHeight = 90.0;
+	CGFloat prefHeight =45.0;
 	return prefHeight;
 }
 @end

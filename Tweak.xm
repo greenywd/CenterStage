@@ -1,4 +1,5 @@
 #define IS_IPHONE_5 [[UIScreen mainScreen] bounds].size.height == 568.0
+#define IS_IPHONE_6 [[UIScreen mainScreen] bounds].size.height == 667.0
 #define IS_IPAD UIUserInterfaceIdiom() == UIUserInterfaceIdiomPad
 
 NS_INLINE CGFloat calcHeight(CGFloat percent) { return percent * [[UIScreen mainScreen] bounds].size.height; }
@@ -18,10 +19,8 @@ NS_INLINE CGFloat calcHeight(CGFloat percent) { return percent * [[UIScreen main
 
 static BOOL CCisEnabled = YES;
 static BOOL NCisEnabled = YES;
-static BOOL iPad = IS_IPAD;
-static BOOL otherRepo;
-static int leftGrabberX = 0;
-static int rightGrabberX = 0;
+int leftGrabberX = 0;
+int rightGrabberX = 0;
 
 BOOL isLandscape() {
 
@@ -37,6 +36,7 @@ void checkLocations() {
   if (isLandscape()) {
     leftGrabberX = calcHeight(.4029);
     rightGrabberX = calcHeight(.6042);
+    NSLog(@"hey! %i", leftGrabberX);
   }
   
   else {
@@ -47,48 +47,23 @@ void checkLocations() {
 }
 
 %hook SBNotificationCenterController
--(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
+-(void)beginPresentationWithTouchLocation:(struct CGPoint)arg1 {
   
   checkLocations();
   
-  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || arg1.y >= 100 || !NCisEnabled) {
+  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !NCisEnabled) {
+    NSLog(@"Over here! %i %i", leftGrabberX, rightGrabberX);
     %orig;
   }
 }
 %end
 
 %hook SBControlCenterController
--(void)beginTransitionWithTouchLocation:(CGPoint)arg1 {
+-(void)beginTransitionWithTouchLocation:(struct CGPoint)arg1 {
 
   checkLocations();
   
   if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !CCisEnabled) {
-    %orig;
-  }
-}
-%end
-
-
-%hook SpringBoard
--(void)applicationDidFinishLaunching:(id)application{
-  %orig;
-    BOOL ranBefore = [[NSUserDefaults standardUserDefaults] boolForKey:@"RanBefore"];
-
-    if (!ranBefore) {
-        UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"CenterStage"
-                          message:@"Hey there! Thank you for downloading CenterStage. \n If you appreciate my work, please donate by using the button in the settings app."
-                          delegate:self
-                          cancelButtonTitle:@"Thanks!"
-                          otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"RanBefore"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-}
-  if (otherRepo) {
-    UIAlertView* repoAlert = [[UIAlertView alloc] initWithTitle:@"Hey there!" message:@"I see you've downloaded my tweak from a different repo. Please download this tweak from BigBoss to help support me and you also get faster updates!" delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
-    [repoAlert show];
     %orig;
   }
 }
@@ -101,18 +76,12 @@ static void loadPrefs()
     {
       CCisEnabled = [prefs objectForKey:@"CCisEnabled"] ? [[prefs objectForKey:@"CCisEnabled"] boolValue] : CCisEnabled;
       NCisEnabled = [prefs objectForKey:@"NCisEnabled"] ? [[prefs objectForKey:@"NCisEnabled"] boolValue] : NCisEnabled;
-      iPad = [prefs objectForKey:@"iPad"] ? [[prefs objectForKey:@"iPad"] boolValue] : iPad;
     }
     [prefs release];
   }
 
-  %ctor
-  //Thanks to Phillip Tennen (/u/Codyd51) for this!
-  {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:@"/var/lib/dpkg/info/com.greeny.centerstage.list"]){
-      otherRepo = YES;
-    }
-
+%ctor
+{
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.greeny.centerstageprefs/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
     loadPrefs();
   }

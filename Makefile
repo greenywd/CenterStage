@@ -1,12 +1,11 @@
 ARCHS = armv7 arm64
+SDKVERSION = 8.1
 
 include /opt/theos/makefiles/common.mk
 
 TWEAK_NAME = CenterStage
 CenterStage_FILES = Tweak.xm
 CenterStage_FRAMEWORKS = UIKit
-
-xxx_CFLAGS=-fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

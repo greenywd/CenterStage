@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo ""
+echo "Reminder: This is a beta and please report all issues to greenydev@greenmail.net.au"
+echo "Also, I know about the positioning issues on the iPhone 6 (at least)"
+echo ""

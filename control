@@ -1,9 +1,10 @@
 Package: com.greeny.centerstage
 Name: CenterStage
 Depends: mobilesubstrate, firmware (>=7.0)
-Version: 1.0.0
+Version: 1.2.2-beta1
 Architecture: iphoneos-arm
 Description: Only invokes the NC and CC by dragging from the middle of the screen!
 Maintainer: GreenyDev
 Author: GreenyDev
+Depiction: http://greenydev.github.io/repo/centerstage/index.html
 Section: Tweaks

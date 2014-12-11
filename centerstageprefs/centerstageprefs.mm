@@ -1,5 +1,7 @@
 #import <Preferences/PSListController.h>
 #import <Preferences/PSTableCell.h>
+#import <MessageUI/MFMailComposeViewController.h>
+#define EMAIL_SUBJECT @"CenterStage Beta Support"
 
 int width = [[UIScreen mainScreen] bounds].size.width;
 
@@ -11,8 +13,8 @@ int width = [[UIScreen mainScreen] bounds].size.width;
 - (CGFloat)preferredHeightForWidth:(CGFloat)arg1 inTableView:(id)arg2;
 @end
 
-@interface centerstageprefsListController: PSListController {
-}
+@interface centerstageprefsListController: PSListController <MFMailComposeViewControllerDelegate> 
+- (void)supportEmail;
 @end
 
 @implementation centerstageprefsListController
@@ -22,12 +24,22 @@ int width = [[UIScreen mainScreen] bounds].size.width;
 	}
 	return _specifiers;
 }
-- (void)save
-{
-    [self.view endEditing:YES];
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    [self dismissViewControllerAnimated: YES completion: nil];
 }
+
 - (void)donate{
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9ZXVHGA5AW5CG&lc=AU&item_name=GreenyDev&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"]];
+}
+
+- (void)supportEmail{
+    MFMailComposeViewController *email = [[MFMailComposeViewController alloc] init];
+    [email setSubject:@"CenterStage Beta Support"];
+    [email setToRecipients:[NSArray arrayWithObjects:@"greenydev@greenmail.net.au", nil]];
+    [self.navigationController presentViewController:email animated:YES completion:nil];
+    email.mailComposeDelegate = self;
+    [email release];
 }
 @end
 

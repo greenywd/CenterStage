@@ -1,5 +1,6 @@
 #define IS_IPHONE_5 [[UIScreen mainScreen] bounds].size.height == 568.0
 #define IS_IPHONE_6 [[UIScreen mainScreen] bounds].size.height == 667.0
+#define IS_IPHONE_6PLUS [[UIScreen mainScreen] bounds].size.height == 736.0
 #define IS_IPAD UIUserInterfaceIdiom() == UIUserInterfaceIdiomPad
 
 NS_INLINE CGFloat calcHeight(CGFloat percent) { return percent * [[UIScreen mainScreen] bounds].size.height; }
@@ -17,8 +18,8 @@ NS_INLINE CGFloat calcHeight(CGFloat percent) { return percent * [[UIScreen main
 -(int)_frontMostAppOrientation;
 @end
 
-static BOOL CCisEnabled = YES;
-static BOOL NCisEnabled = YES;
+BOOL CCisEnabled = YES;
+BOOL NCisEnabled = YES;
 int leftGrabberX = 0;
 int rightGrabberX = 0;
 
@@ -36,30 +37,31 @@ void checkLocations() {
   if (isLandscape()) {
     leftGrabberX = calcHeight(.4029);
     rightGrabberX = calcHeight(.6042);
-    NSLog(@"hey! %i", leftGrabberX);
+  } else {
+    leftGrabberX = calcHeight(.1725);
+    rightGrabberX = calcHeight(.4075);
   }
-  
-  else {
-    leftGrabberX = calcHeight(.2025);
-    rightGrabberX = calcHeight(.4575);
-  }
+
+  //if(IS_IPHONE_6){
+    //leftGrabberX = calcHeight(.4029);
+    //rightGrabberX = calcHeight(.)
+  //}
 
 }
 
 %hook SBNotificationCenterController
--(void)beginPresentationWithTouchLocation:(struct CGPoint)arg1 {
+-(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
   
   checkLocations();
   
   if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !NCisEnabled) {
-    NSLog(@"Over here! %i %i", leftGrabberX, rightGrabberX);
     %orig;
   }
 }
 %end
 
 %hook SBControlCenterController
--(void)beginTransitionWithTouchLocation:(struct CGPoint)arg1 {
+-(void)beginTransitionWithTouchLocation:(CGPoint)arg1 {
 
   checkLocations();
   

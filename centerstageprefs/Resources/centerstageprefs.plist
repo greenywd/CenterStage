@@ -34,6 +34,24 @@
             <key>cell</key>
             <string>PSGroupCell</string>
             <key>footerText</key>
+            <string>I know about the positioning issues present on the iPhone 6 (at least). Please don't email me about that.</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSButtonCell</string>
+            <key>label</key>
+            <string>Support (Email)</string>
+            <key>action</key>
+            <string>supportEmail</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+        </dict>
+               <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>footerText</key>
             <string>If you appreciate my work, please use this button to donate to me.</string>
         </dict>
         <dict>

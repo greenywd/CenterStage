@@ -9,3 +9,4 @@ obj/
 ./obj/
 obj
 .DS_Store
+.sh

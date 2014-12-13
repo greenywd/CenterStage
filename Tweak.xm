@@ -26,8 +26,8 @@ NS_INLINE CGFloat calcHeight(CGFloat percent) { return percent * [[UIScreen main
 //declared some variables
 BOOL CCisEnabled = YES;
 BOOL NCisEnabled = YES;
-int leftGrabberX = 0;
-int rightGrabberX = 0;
+int leftGrabberX;
+int rightGrabberX;
 
 //self defined (C) method that detects if the device is landscape
 BOOL isLandscape() {

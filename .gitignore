@@ -9,3 +9,6 @@ obj/
 ./obj/
 obj
 .DS_Store
+centerstage.sublime-project
+centerstage.sublime-workspace
+Packages/

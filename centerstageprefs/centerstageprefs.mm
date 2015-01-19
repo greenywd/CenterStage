@@ -53,11 +53,17 @@ int width = [[UIScreen mainScreen] bounds].size.width;
 @end
 
 @implementation DataManagerCustomCell
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    _label.frame = CGRectMake(0, -15, self.frame.size.width, 60);
+}
+
 - (id)initWithSpecifier:(PSSpecifier *)specifier
 {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
 	if (self) {
 		CGRect frame = CGRectMake(0, -15, width, 60);
+        self.backgroundColor = [UIColor clearColor];
  
 		_label = [[UILabel alloc] initWithFrame:frame];
 		[_label setNumberOfLines:1];

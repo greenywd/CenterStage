@@ -1,6 +1,6 @@
 ARCHS = armv7 arm64
-TARGET=:clang
-SDKVERSION = 8.1
+#TARGET=:clang
+#SDKVERSION = 8.1
 THEOS_BUILD_DIR = Packages
 
 include /opt/theos/makefiles/common.mk

@@ -7,7 +7,6 @@ centerstageprefs_FILES = centerstageprefs.mm
 centerstageprefs_INSTALL_PATH = /Library/PreferenceBundles
 centerstageprefs_FRAMEWORKS = UIKit
 centerstageprefs_PRIVATE_FRAMEWORKS = Preferences MessageUI
-centerstagprefs_CFLAGS=-fobjc-arc
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 

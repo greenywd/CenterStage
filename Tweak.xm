@@ -79,22 +79,60 @@ void checkLocations() {
     %orig;
   }
 }
+- (void)beginPresentationWithTouchLocation:(struct CGPoint)arg1{
+
+  checkLocations();
+
+  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || CCisEnabled){
+    %orig;
+  }
+}
+- (void)updateTransitionWithTouchLocation:(struct CGPoint)arg1:(struct CGPoint)arg2{
+
+  checkLocations();
+
+  if((arg2.x > leftGrabberX && arg2.x < rightGrabberX) || CCisEnabled){
+    %orig;
+  }
+}
+- (void)endTransitionWithVelocity:(struct CGPoint)arg1{
+    checkLocations();
+
+  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || CCisEnabled){
+    %orig;
+  }
+}
+- (void)endTransitionWithVelocity:(struct CGPoint)arg1 wasCancelled:(_Bool)arg2{
+      checkLocations();
+      arg2 = FALSE;
+  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || CCisEnabled){
+    %orig;
+  }
+}
+- (void)controlCenterViewControllerWantsDismissal:(CGPoint)arg1{
+        checkLocations();
+
+  if((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || CCisEnabled){
+    %orig;
+  }
+}
 %end
 
-//Preferences (the old way though - need to update it)
-static void loadPrefs()
-{
-  NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.greeny.centerstageprefs.plist"];
-  if(prefs)
-    {
-      CCisEnabled = [prefs objectForKey:@"CCisEnabled"] ? [[prefs objectForKey:@"CCisEnabled"] boolValue] : CCisEnabled;
-      NCisEnabled = [prefs objectForKey:@"NCisEnabled"] ? [[prefs objectForKey:@"NCisEnabled"] boolValue] : NCisEnabled;
-    }
-    [prefs release];
-  }
+//Preferences
+static void loadPreferences() {
+    CFPreferencesAppSynchronize(CFSTR("com.greeny.centerstageprefs"));
+
+    CCisEnabled = [(id)CFPreferencesCopyAppValue(CFSTR("CCisEnabled"), CFSTR("com.greeny.centerstageprefs")) boolValue];
+    NCisEnabled = [(id)CFPreferencesCopyAppValue(CFSTR("NCisEnabled"), CFSTR("com.greeny.centerstageprefs")) boolValue];
+}
 
 %ctor
 {
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.greeny.centerstageprefs/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
-    loadPrefs();
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+                                NULL,
+                                (CFNotificationCallback)loadPreferences,
+                                CFSTR("com.greeny.centerstageprefs/settingschanged"),
+                                NULL,
+                                CFNotificationSuspensionBehaviorDeliverImmediately);
+    loadPreferences();
   }

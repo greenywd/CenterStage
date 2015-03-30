@@ -54,6 +54,24 @@ int dynamicWidthOfRegion() {
 
 //self defined (C) method that detects the locations of where the NC/CC is allowed to be presented from
 void checkLocations() {
+<<<<<<< HEAD
+=======
+
+    widthOfRegion = dynamicWidthOfRegion();
+
+    if (isLandscape()) {
+        leftGrabberX = (SCREEN_BOUNDS.size.height/2)-(widthOfRegion/2);
+        rightGrabberX = (SCREEN_BOUNDS.size.height/2)+(widthOfRegion/2);
+    } else {
+        leftGrabberX = (SCREEN_BOUNDS.size.width/2)-(widthOfRegion/2);
+        rightGrabberX = (SCREEN_BOUNDS.size.width/2)+(widthOfRegion/2);
+    }
+
+    //if(IS_IPHONE_6){
+        //leftGrabberX = calcHeight(.4029);
+        //rightGrabberX = calcHeight(.)
+    //}
+>>>>>>> 881c4f490358b625bf10e8aef74a6f4091963b8e
 
     widthOfRegion = dynamicWidthOfRegion();
 
@@ -68,6 +86,7 @@ void checkLocations() {
 
 //Hook into class and hijack method - add in our checkLocations method, use leftGrabberX and rightGrabberX to determine where to present the NC from
 %hook SBNotificationCenterController
+<<<<<<< HEAD
 /*
 - (void)_showNotificationsGestureBeganWithLocation:(CGPoint)location {
     
@@ -79,6 +98,8 @@ void checkLocations() {
     return;
 }
 */
+=======
+>>>>>>> 881c4f490358b625bf10e8aef74a6f4091963b8e
 
 -(void)beginPresentationWithTouchLocation:(CGPoint)arg1 {
   
@@ -101,6 +122,23 @@ void checkLocations() {
     if ((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !CCisEnabled) {
         %orig;
     }
+<<<<<<< HEAD
+
+}
+
+-(void)updateTransitionWithTouchLocation:(CGPoint)arg1 velocity:(CGPoint)arg2 {
+
+=======
+
+}
+
+- (void)beginPresentationWithTouchLocation:(struct CGPoint)arg1{
+
+    checkLocations();
+
+    if ((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !CCisEnabled) {
+        %orig;
+    }
 
 }
 
@@ -113,6 +151,41 @@ void checkLocations() {
     }
 
 }
+
+- (void)endTransitionWithVelocity:(struct CGPoint)arg1{
+>>>>>>> 881c4f490358b625bf10e8aef74a6f4091963b8e
+    checkLocations();
+
+    if ((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !CCisEnabled) {
+        %orig;
+    }
+<<<<<<< HEAD
+
+=======
+
+}
+
+- (void)endTransitionWithVelocity:(struct CGPoint)arg1 wasCancelled:(_Bool)arg2{
+    checkLocations();
+    arg2 = FALSE;
+
+    if ((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !CCisEnabled) {
+        %orig;
+    }
+
+}
+
+- (void)controlCenterViewControllerWantsDismissal:(CGPoint)arg1{
+
+    checkLocations();
+
+    if ((arg1.x > leftGrabberX && arg1.x < rightGrabberX) || !CCisEnabled) {
+        %orig;
+    }
+
+>>>>>>> 881c4f490358b625bf10e8aef74a6f4091963b8e
+}
+
 %end
 
 //Preferences
@@ -131,4 +204,8 @@ static void loadPreferences() {
                                 NULL,
                                 CFNotificationSuspensionBehaviorDeliverImmediately);
     loadPreferences();
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 881c4f490358b625bf10e8aef74a6f4091963b8e
